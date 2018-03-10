@@ -52,4 +52,5 @@ gulp.task('watch', function () {
     gulp.watch('./src/index.html', ['copy-html']);
 });
 
+gulp.task('build', ['copy', 'styles']);
 gulp.task('default', ['copy', 'styles', 'watch', 'webserver']);
