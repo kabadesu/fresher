@@ -75,7 +75,7 @@ rules:
     - max-depth: 3
   no-color-keywords: 1
   no-color-literals: 1
-  no-css-comments: 1
+  no-css-comments: 0
   no-debug: 1
   no-duplicate-properties: 1
   no-empty-rulesets: 1
@@ -138,7 +138,7 @@ rules:
         - '%'
       per-property: {}
   quotes:
-    - 1
+    - 2
     - style: single
   shorthand-values:
     - 1

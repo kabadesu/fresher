@@ -20,13 +20,6 @@ gulp.task('webserver', function() {
     }));
 });
 
-gulp.task('styles', function () {
-    return gulp.src('./src/scss/**/*.scss')
-    .pipe($.sass().on('error', $.sass.logError))
-    .pipe($.postcss(plugins))
-    .pipe(gulp.dest('./dist/css'))
-});
-
 gulp.task('copy-html', function () {
     return gulp.src('./src/index.html')
     .pipe(gulp.dest('./dist/'))
@@ -39,9 +32,24 @@ gulp.task('copy-js', function () {
 
 gulp.task('copy', ['copy-html', 'copy-js']);
 
+gulp.task('lint-styles', function () {
+    return gulp.src('./src/scss/**/*.scss')
+    .pipe($.sassLint())
+    .pipe($.sassLint.format())
+    .pipe($.sassLint.failOnError())
+})
+
+gulp.task('styles', ['lint-styles'], function () {
+    return gulp.src('./src/scss/**/*.scss')
+    .pipe($.sass().on('error', $.sass.logError))
+    .pipe($.postcss(plugins))
+    .pipe(gulp.dest('./dist/css'))
+});
+
 gulp.task('watch', function () {
     gulp.watch('./src/scss/**/*.scss', ['styles']);
+    gulp.watch('./src/js/**/*.js', ['copy-js']);
     gulp.watch('./src/index.html', ['copy-html']);
 });
 
-gulp.task('default', ['styles', 'watch', 'copy', 'webserver']);
+gulp.task('default', ['copy', 'styles', 'watch', 'webserver']);
