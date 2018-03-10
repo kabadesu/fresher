@@ -26,7 +26,7 @@ gulp.task('webserver', () => {
 gulp.task('copy-html', () => gulp.src('./src/index.html')
     .pipe(gulp.dest('./dist/')));
 
-gulp.task('copy-js', () => gulp.src('./src/js/**/*.js')
+gulp.task('copy-js', ['lint-js'], () => gulp.src('./src/js/**/*.js')
     .pipe(gulp.dest('./dist/js')));
 
 gulp.task('copy', ['copy-html', 'copy-js']);
@@ -35,6 +35,16 @@ gulp.task('lint-styles', () => gulp.src('./src/scss/**/*.scss')
     .pipe($.sassLint())
     .pipe($.sassLint.format())
     .pipe($.sassLint.failOnError()));
+
+gulp.task('lint-js', () => {
+    gulp.src([
+        'src/js/**/*.js',
+        '!node_modules/**',
+        '!dist/**',
+        '!src/js/vendor/**',
+    ]).pipe($.eslint({ useEslintrc: true }))
+        .pipe($.eslint.format());
+});
 
 gulp.task('styles', ['lint-styles'], () => gulp.src('./src/scss/**/*.scss')
     .pipe($.sass().on('error', $.sass.logError))
