@@ -1,0 +1,15 @@
+html {
+    box-sizing: border-box;
+    height: 100%;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+body {
+    font-family: 'Helvetica Neue', helvetica, arial, sans-serif;
+    min-height: 100%;
+}
