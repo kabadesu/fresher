@@ -4,7 +4,16 @@ const autoprefixer = require('autoprefixer');
 
 const $ = gulpLoadPlugins();
 
-const plugins = [
+// ESLint takes 8 seconds to run if it falls back to reading .eslintignore so
+// I've redfined that list here to speed things up.
+const eslintFileList = [
+    'src/js/**/*.js',
+    '!node_modules/**',
+    '!dist/**',
+    '!src/js/vendor/**',
+];
+
+const postcssPlugins = [
     autoprefixer({
         browsers: [
             'last 2 versions',
@@ -36,19 +45,13 @@ gulp.task('lint-styles', () => gulp.src('./src/scss/**/*.scss')
     .pipe($.sassLint.format())
     .pipe($.sassLint.failOnError()));
 
-gulp.task('lint-js', () => {
-    gulp.src([
-        'src/js/**/*.js',
-        '!node_modules/**',
-        '!dist/**',
-        '!src/js/vendor/**',
-    ]).pipe($.eslint({ useEslintrc: true }))
-        .pipe($.eslint.format());
-});
+gulp.task('lint-js', () => gulp.src(eslintFileList)
+    .pipe($.eslint({ useEslintrc: true }))
+    .pipe($.eslint.format()));
 
 gulp.task('styles', ['lint-styles'], () => gulp.src('./src/scss/**/*.scss')
     .pipe($.sass().on('error', $.sass.logError))
-    .pipe($.postcss(plugins))
+    .pipe($.postcss(postcssPlugins))
     .pipe(gulp.dest('./dist/css')));
 
 gulp.task('watch', () => {
