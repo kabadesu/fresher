@@ -4,8 +4,7 @@ const autoprefixer = require('autoprefixer');
 
 const $ = gulpLoadPlugins();
 
-// ESLint takes 8 seconds to run if it falls back to reading .eslintignore so
-// I've redfined that list here to speed things up.
+// gulp-eslint can read from .eslintignore but it makes the task run slower.
 const eslintFileList = [
     'src/js/**/*.js',
     '!node_modules/**',
