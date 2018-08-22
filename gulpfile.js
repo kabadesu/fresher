@@ -27,6 +27,7 @@ gulp.task('webserver', () => {
         server: {
             baseDir: './dist/',
         },
+        port: 8000,
         // ghostMode: false,
     });
 });
