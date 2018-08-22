@@ -27,6 +27,7 @@ gulp.task('webserver', () => {
         server: {
             baseDir: './dist/',
         },
+        // ghostMode: false,
     });
 });
 

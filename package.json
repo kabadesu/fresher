@@ -29,7 +29,6 @@
     "stylelint": "^9.4.0",
     "stylelint-config-recommended-scss": "^3.2.0",
     "stylelint-order": "^1.0.0",
-    "stylelint-scss": "^3.3.0",
-    "stylint": "^1.5.9"
+    "stylelint-scss": "^3.3.0"
   }
 }
