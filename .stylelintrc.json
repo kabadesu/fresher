@@ -1,9 +1,21 @@
 {
     "extends": "stylelint-config-recommended-scss",
     "plugins": [
-		"stylelint-order"
+        "stylelint-a11y",
+        "stylelint-at-rule-no-children",
+        "stylelint-declaration-block-no-ignored-properties",
+        "stylelint-high-performance-animation",
+        "stylelint-order",
+        "stylelint-selector-bem-pattern"
 	],
     "rules": {
+        "a11y/selector-pseudo-class-focus": true,
+        "aditayvm/at-rule-no-children": [{
+            "ignore": [
+                "for",
+                "each"
+            ]
+        }],
         "at-rule-empty-line-before": [
             "always",
             {
@@ -75,6 +87,7 @@
             }
         ],
         "no-missing-end-of-source-newline": true,
+        "number-leading-zero": "always",
         "order/order": [
             "custom-properties",
             "dollar-variables",
@@ -88,16 +101,33 @@
                 "name": "media"
             },
             "rules"
-		],
-        "number-leading-zero": "always",
+        ],
+        "plugin/declaration-block-no-ignored-properties": true,
+        "plugin/no-low-performance-animation-properties": [
+            true,
+            {
+                "ignore": "paint-properties"
+            }
+        ],
+        "plugin/selector-bem-pattern": {
+            "preset": "bem",
+            "implicitComponents": "src/scss/components/**/*.scss",
+            "componentSelectors": "^\\.{componentName}(?:__[a-z0-9]+(?:-[a-z0-9]+)*)*(?:--[a-z0-9]+(?:-[a-z0-9]+)*)*(?:\\[.+\\])*$",
+            "utilitySelectors": "^\\.u-[a-z0-9]+$",
+            "ignoreSelectors": [
+                "\\#\\{\\$[a-z0-9]+(?:-[a-z0-9]+)*\\}"
+            ]
+        },
         "property-no-vendor-prefix": true,
         "rule-empty-line-before": [
-            "always",
+            "always-multi-line",
             {
                 "except": ["first-nested"],
                 "ignore": ["after-comment"]
             }
         ],
+        "scss/operator-no-unspaced": true,
+        "scss/operator-no-newline-before": true,
         "selector-attribute-quotes": "always",
         "selector-attribute-operator-space-before": "never",
         "selector-attribute-operator-space-after": "never",
@@ -118,8 +148,6 @@
                 ]
             }
         ],
-        "value-no-vendor-prefix": true,
-        "scss/operator-no-unspaced": true,
-        "scss/operator-no-newline-before": true
+        "value-no-vendor-prefix": true
     }
 }
