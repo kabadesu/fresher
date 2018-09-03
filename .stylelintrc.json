@@ -13,6 +13,8 @@
         "aditayvm/at-rule-no-children": [{
             "ignore": [
                 "for",
+                "if",
+                "else",
                 "each"
             ]
         }],
@@ -21,14 +23,13 @@
             {
                 "except": [
                     "first-nested",
-                    "after-same-name"
+                    "blockless-after-same-name-blockless"
                 ],
                 "ignore": [
                     "after-comment"
                 ],
                 "ignoreAtRules": [
-                    "each",
-                    "font-face"
+                    "else"
                 ]
             }
         ],
