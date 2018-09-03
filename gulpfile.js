@@ -36,13 +36,17 @@ gulp.task('webserver', () => {
 gulp.task('clean', () => gulp.src('./dist/*', { read: false })
     .pipe($.clean()));
 
-gulp.task('nunjucks', () => gulp.src('src/pages/**/*.+(html|nunjucks)')
+gulp.task('nunjucks', () => gulp.src('./src/pages/**/*.njk')
     .pipe($.data(() => JSON.parse(fs.readFileSync('./src/data.json'))))
     .pipe($.nunjucksRender({
         path: [
             'src/templates',
         ],
     }))
+    .on('error', function handleError(error) {
+        console.log(error.toString());
+        this.emit('end');
+    })
     .pipe(gulp.dest('./dist')));
 
 gulp.task('copy-images', () => gulp.src('./src/img/**/*')
@@ -81,7 +85,7 @@ gulp.task('watch', () => {
     gulp.watch('./src/scss/**/*.scss', ['styles']);
     gulp.watch('./src/js/**/*.js', ['copy-js']);
     gulp.watch('./src/data.json', ['nunjucks']).on('change', browserSync.reload);
-    gulp.watch('./src/**/*.+(html|nunjucks)', ['nunjucks']).on('change', browserSync.reload);
+    gulp.watch('./src/**/*.njk', ['nunjucks']).on('change', browserSync.reload);
 });
 
 gulp.task('build', ['copy', 'nunjucks', 'styles']);
