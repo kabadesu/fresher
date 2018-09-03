@@ -2,6 +2,7 @@ const gulp = require('gulp');
 const gulpLoadPlugins = require('gulp-load-plugins');
 const autoprefixer = require('autoprefixer');
 const browserSync = require('browser-sync').create();
+const fs = require('fs');
 
 const $ = gulpLoadPlugins();
 
@@ -17,7 +18,7 @@ const autoprefixerConfig = [
     autoprefixer({
         browsers: [
             'last 2 versions',
-            '> 5%',
+            '> 1%',
         ],
     }),
 ];
@@ -32,8 +33,17 @@ gulp.task('webserver', () => {
     });
 });
 
-gulp.task('copy-html', () => gulp.src('./src/index.html')
-    .pipe(gulp.dest('./dist/')));
+gulp.task('clean', () => gulp.src('./dist/*', { read: false })
+    .pipe($.clean()));
+
+gulp.task('nunjucks', () => gulp.src('src/pages/**/*.+(html|nunjucks)')
+    .pipe($.data(() => JSON.parse(fs.readFileSync('./src/data.json'))))
+    .pipe($.nunjucksRender({
+        path: [
+            'src/templates',
+        ],
+    }))
+    .pipe(gulp.dest('./dist')));
 
 gulp.task('copy-images', () => gulp.src('./src/img/**/*')
     .pipe(gulp.dest('./dist/img')));
@@ -44,7 +54,7 @@ gulp.task('copy-fonts', () => gulp.src('./src/fonts/**/*')
 gulp.task('copy-js', ['lint-js'], () => gulp.src('./src/js/**/*.js')
     .pipe(gulp.dest('./dist/js')));
 
-gulp.task('copy', ['copy-images', 'copy-fonts', 'copy-html', 'copy-js']);
+gulp.task('copy', ['copy-images', 'copy-fonts', 'copy-js']);
 
 gulp.task('lint-styles', () => gulp.src('./src/scss/**/*.scss')
     .pipe($.stylelint({
@@ -70,9 +80,10 @@ gulp.task('styles', () => gulp.src('./src/scss/**/*.scss')
 gulp.task('watch', () => {
     gulp.watch('./src/scss/**/*.scss', ['styles']);
     gulp.watch('./src/js/**/*.js', ['copy-js']);
-    gulp.watch('./src/index.html', ['copy-html']).on('change', browserSync.reload);
+    gulp.watch('./src/data.json', ['nunjucks']).on('change', browserSync.reload);
+    gulp.watch('./src/**/*.+(html|nunjucks)', ['nunjucks']).on('change', browserSync.reload);
 });
 
-gulp.task('build', ['copy', 'styles']);
+gulp.task('build', ['copy', 'nunjucks', 'styles']);
 gulp.task('test', ['lint-styles', 'lint-js']);
-gulp.task('default', ['copy', 'styles', 'watch', 'webserver']);
+gulp.task('default', ['copy', 'nunjucks', 'styles', 'watch', 'webserver']);
