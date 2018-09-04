@@ -1,4 +1,9 @@
+{% from "icon.njk" import icon %}
 {% extends "layout.njk" %}
+
 {% block content %}
     <h1>{{projectName}}</h1>
+
+    {{ icon({name: 'triangle', extraClasses: ''}) }}
+
 {% endblock %}
