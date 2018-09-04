@@ -121,4 +121,4 @@ gulp.task('watch', () => {
 
 gulp.task('build', ['copy', 'nunjucks', 'styles']);
 gulp.task('test', ['lint-styles', 'lint-js']);
-gulp.task('default', ['copy', 'nunjucks', 'styles', 'watch', 'webserver']);
+gulp.task('default', ['copy', 'nunjucks', 'icons', 'styles', 'watch', 'webserver']);
