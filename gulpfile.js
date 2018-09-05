@@ -113,7 +113,7 @@ gulp.task('copy', ['copy-images', 'copy-fonts', 'copy-js']);
 
 gulp.task('watch', () => {
     gulp.watch(`${_.src}/scss/**/*.scss`, ['styles']);
-    gulp.watch(`${_.src}/js/**/*.js`, ['copy-js']);
+    gulp.watch(`${_.src}/js/**/*.js`, ['copy-js']).on('change', browserSync.reload);
     gulp.watch(`${_.src}/icons/**/*.svg`, ['icons']);
     gulp.watch(`${_.src}/data.json`, ['nunjucks']).on('change', browserSync.reload);
     gulp.watch(`${_.src}/nunjucks/**/*.njk`, ['nunjucks']).on('change', browserSync.reload);
