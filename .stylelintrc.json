@@ -22,10 +22,10 @@
             "always",
             {
                 "except": [
-                    "first-nested",
                     "blockless-after-same-name-blockless"
                 ],
                 "ignore": [
+		    "first-nested",
                     "after-comment"
                 ],
                 "ignoreAtRules": [
