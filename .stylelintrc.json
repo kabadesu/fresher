@@ -1,7 +1,6 @@
 {
     "extends": "stylelint-config-recommended-scss",
     "plugins": [
-        "stylelint-a11y",
         "stylelint-at-rule-no-children",
         "stylelint-declaration-block-no-ignored-properties",
         "stylelint-high-performance-animation",
@@ -9,7 +8,6 @@
         "stylelint-selector-bem-pattern"
 	],
     "rules": {
-        "a11y/selector-pseudo-class-focus": true,
         "aditayvm/at-rule-no-children": [{
             "ignore": [
                 "for",

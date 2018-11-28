@@ -88,7 +88,7 @@ gulp.task('styles', () => gulp.src(`${_.src}/scss/main.scss`)
     .pipe(gulp.dest(`${_.dist}/css`))
     .pipe(browserSync.reload({ stream: true })));
 
-gulp.task('lint-styles', () => gulp.src(`${_.src}/scss/**/*.scss`)
+gulp.task('stylelint', () => gulp.src(`${_.src}/scss/**/*.scss`)
     .pipe($.stylelint({
         reporters: [{
             formatter: 'string',
@@ -120,5 +120,5 @@ gulp.task('watch', () => {
 });
 
 gulp.task('build', ['copy', 'nunjucks', 'styles']);
-gulp.task('test', ['lint-styles', 'lint-js']);
+gulp.task('test', ['stylelint', 'lint-js']);
 gulp.task('default', ['copy', 'nunjucks', 'icons', 'styles', 'watch', 'webserver']);
