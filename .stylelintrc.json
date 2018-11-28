@@ -25,7 +25,7 @@
                     "blockless-after-same-name-blockless"
                 ],
                 "ignore": [
-		    "first-nested",
+                    "first-nested",
                     "after-comment"
                 ],
                 "ignoreAtRules": [
@@ -71,7 +71,8 @@
                     "/stylelint/",
                     "/<|>/",
                     "/{|}/",
-                    "/;/"
+                    "/;/",
+                    "/http/"
                 ]
             }
         ],
