@@ -19,10 +19,8 @@
         "at-rule-empty-line-before": [
             "always",
             {
-                "except": [
-                    "blockless-after-same-name-blockless"
-                ],
                 "ignore": [
+                    "blockless-after-same-name-blockless",
                     "first-nested",
                     "after-comment"
                 ],
