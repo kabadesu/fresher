@@ -50,11 +50,14 @@
         "indentation": [
             4,
             {
-                "ignore": ["param"]
+                "ignore": [
+                    "param",
+                    "value"
+                ]
             }
         ],
         "max-empty-lines": [
-            1,
+            2,
             {
                 "ignore": "comments"
             }
