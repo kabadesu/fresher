@@ -64,14 +64,11 @@ gulp.task('icons', () => gulp.src(`${_.src}/icons/**/*.svg`)
     .pipe($.rename('icons.svg'))
     .pipe(gulp.dest(`${_.dist}/img`)));
 
-gulp.task('nunjucks', () => gulp.src(`${_.src}/nunjucks/pages/**/*.njk`)
+gulp.task('twig', () => gulp.src(`${_.src}/twig/pages/**/*.twig`)
     .pipe($.data(() => JSON.parse(fs.readFileSync(`${_.src}/data.json`))))
-    .pipe($.nunjucksRender({
-        path: [
-            `${_.src}/nunjucks/templates`,
-            `${_.src}/nunjucks/templates/macros`,
-            `${_.src}/nunjucks/templates/partials`,
-        ],
+    .pipe($.twig({
+        base: `${_.src}/twig/`,
+        extname: 'twig',
     }))
     .on('error', function handleError(error) {
         console.log(error.toString());
@@ -115,10 +112,10 @@ gulp.task('watch', () => {
     gulp.watch(`${_.src}/scss/**/*.scss`, ['styles']);
     gulp.watch(`${_.src}/js/**/*.js`, ['copy-js']).on('change', browserSync.reload);
     gulp.watch(`${_.src}/icons/**/*.svg`, ['icons']);
-    gulp.watch(`${_.src}/data.json`, ['nunjucks']).on('change', browserSync.reload);
-    gulp.watch(`${_.src}/nunjucks/**/*.njk`, ['nunjucks']).on('change', browserSync.reload);
+    gulp.watch(`${_.src}/data.json`, ['twig']).on('change', browserSync.reload);
+    gulp.watch(`${_.src}/twig/**/*.njk`, ['twig']).on('change', browserSync.reload);
 });
 
-gulp.task('build', ['copy', 'nunjucks', 'styles']);
+gulp.task('build', ['copy', 'twig', 'styles']);
 gulp.task('test', ['stylelint', 'lint-js']);
-gulp.task('default', ['copy', 'nunjucks', 'icons', 'styles', 'watch', 'webserver']);
+gulp.task('default', ['copy', 'twig', 'icons', 'styles', 'watch', 'webserver']);

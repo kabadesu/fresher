@@ -1,0 +1,5 @@
+{% macro icon(props) %}
+    <svg class="icon {{props.extraClasses}}">
+        <use xlink:href="/img/icons.svg#{{props.name}}" />
+    </svg>
+{% endmacro %}
