@@ -68,7 +68,6 @@ gulp.task('twig', () => gulp.src(`${_.src}/twig/pages/**/*.twig`)
     .pipe($.data(() => JSON.parse(fs.readFileSync(`${_.src}/data.json`))))
     .pipe($.twig({
         base: `${_.src}/twig/`,
-        extname: 'twig',
     }))
     .on('error', function handleError(error) {
         console.log(error.toString());
