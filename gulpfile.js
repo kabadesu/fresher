@@ -104,7 +104,7 @@ function styles() {
     return gulp.src(`${_.src}/scss/main.scss`)
     .pipe($.sass({
         precision: 8,
-        includePaths: ['node_modules/normalize-scss/sass/normalize'],
+        includePaths: ['node_modules/normalize-scss/sass'],
     }).on('error', $.sass.logError))
     .pipe($.postcss(postcssPlugins))
     .pipe(gulp.dest(`${_.dist}/css`))
