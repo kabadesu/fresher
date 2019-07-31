@@ -144,7 +144,7 @@ gulp.task('copy', gulp.series(copyImages, copyFonts, lintJs, copyJs));
 
 gulp.task('watch', () => {
     gulp.watch(`${_.src}/scss/**/*.scss`, gulp.series(styles));
-    gulp.watch(`${_.src}/js/**/*.js`, gulp.series('copy-js')).on('change', browserSync.reload);
+    gulp.watch(`${_.src}/js/**/*.js`, gulp.series(lintJs, copyJs)).on('change', browserSync.reload);
     gulp.watch(`${_.src}/icons/**/*.svg`, gulp.series(icons));
     gulp.watch(`${_.src}/data.json`, gulp.series(twig)).on('change', browserSync.reload);
     gulp.watch(`${_.src}/twig/**/*.twig`, gulp.series(twig)).on('change', browserSync.reload);
