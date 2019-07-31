@@ -93,6 +93,8 @@ function icons() {
 }
 
 function twig() {
+    let { loader, env } = twingInit();
+
     return gulp.src(`${_.src}/twig/pages/**/*.twig`)
         .pipe($.twing(env, siteData))
         .pipe(gulp.dest(_.dist))
