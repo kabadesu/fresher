@@ -7,7 +7,7 @@
 * @author Digital Surgeons
 */
 
-(function() {
+function togglesSwitches() {
 
 	"use strict";
 
@@ -434,6 +434,8 @@
 	})();
 
 	// initialize toggles & switches in entire document
-	initialize(document);
+    initialize(document);
 
-})();
+};
+
+export { togglesSwitches };
