@@ -2,9 +2,9 @@ const gulp = require('gulp');
 const gulpLoadPlugins = require('gulp-load-plugins');
 const autoprefixer = require('autoprefixer');
 const browserSync = require('browser-sync').create();
+const webpack = require('webpack');
+const webpackConfig = require('./webpack.config.js');
 const fs = require('fs');
-
-const { TwingEnvironment, TwingLoaderFilesystem } = require('twing');
 
 const $ = gulpLoadPlugins({
     pattern: [
@@ -21,7 +21,11 @@ const _ = {
     dist: './dist',
 };
 
+// Twig setup
+
 let siteData = require(`${_.src}/data.json`);
+
+const { TwingEnvironment, TwingLoaderFilesystem } = require('twing');
 
 const twingInit = () => {
     const loader = new TwingLoaderFilesystem('.');
@@ -37,8 +41,6 @@ const twingInit = () => {
         loader, env
     };
 }
-
-let { loader, env } = twingInit();
 
 // gulp-eslint can read from .eslintignore but it makes the task run slower.
 const eslintFileList = [
@@ -137,16 +139,25 @@ function copyFonts() {
     .pipe(gulp.dest(`${_.dist}/fonts`))
 }
 
-function copyJs() {
-    return gulp.src(`${_.src}/js/**/*.js`)
-    .pipe(gulp.dest(`${_.dist}/js`))
+function buildJs() {
+    return new Promise((resolve, reject) => {
+        webpack(webpackConfig, (err, stats) => {
+            if (err) {
+                return reject(err)
+            }
+            if (stats.hasErrors()) {
+                return reject(new Error(stats.compilation.errors.join('\n')))
+            }
+            resolve()
+        })
+    })
 }
 
-gulp.task('copy', gulp.series(copyImages, copyFonts, lintJs, copyJs));
+gulp.task('copy', gulp.series(copyImages, copyFonts, lintJs, buildJs));
 
 gulp.task('watch', () => {
-    gulp.watch(`${_.src}/scss/**/*.scss`, gulp.series(styles));
-    gulp.watch(`${_.src}/js/**/*.js`, gulp.series(lintJs, copyJs)).on('change', browserSync.reload);
+    gulp.watch(`${_.src}/scss/**/*.scss`, gulp.series(stylelint, styles));
+    gulp.watch(`${_.src}/js/**/*.js`, gulp.series(lintJs, buildJs)).on('change', browserSync.reload);
     gulp.watch(`${_.src}/icons/**/*.svg`, gulp.series(icons));
     gulp.watch(`${_.src}/data.json`, gulp.series(twig)).on('change', browserSync.reload);
     gulp.watch(`${_.src}/twig/**/*.twig`, gulp.series(twig)).on('change', browserSync.reload);
@@ -154,6 +165,6 @@ gulp.task('watch', () => {
 
 gulp.task('clean', clean);
 
-gulp.task('build', gulp.series('copy', twig, styles));
+gulp.task('build', gulp.series('copy', twig, icons, stylelint, styles));
 gulp.task('test', gulp.series(stylelint, lintJs));
-gulp.task('default', gulp.series('copy', twig, icons, styles, gulp.parallel('watch', webserver)));
+gulp.task('default', gulp.series('copy', twig, icons, stylelint, styles, gulp.parallel('watch', webserver)));
