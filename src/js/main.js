@@ -1,5 +1,4 @@
-import { svg4everybody } from './vendor/svg4everybody';
-import { togglesSwitches } from './vendor/toggles-switches';
+import svg4everybody from 'svg4everybody';
+import 'toggles-switches/toggles-switches';
 
-togglesSwitches();
 svg4everybody();

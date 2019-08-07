@@ -41,6 +41,8 @@
         "stylelint-declaration-block-no-ignored-properties": "^2.1.0",
         "stylelint-order": "^3.0.1",
         "stylelint-scss": "^3.9.2",
+        "svg4everybody": "^2.1.9",
+        "toggles-switches": "https://github.com/digitalsurgeons/toggles-switches",
         "twing": "^2.3.3",
         "webpack": "^4.39.0"
     }
