@@ -1,0 +1,7 @@
+{% macro quote(props) %}
+    {% from "@components/person.twig" import person %}
+
+    {{props.text}}
+    {{ person(props.author) }}
+
+{% endmacro %}

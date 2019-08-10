@@ -1,0 +1,14 @@
+
+{% macro module1(props) %}
+    <p>{{ props.title }} - {{ props.intro }}</p>
+
+    {% for component in props.components %}
+        {% include '@includes/' ~ component.component ~ '.twig' with {
+            props: component.props
+        } %}
+    {% endfor %}
+{% endmacro %}
+
+{% macro module2(props) %}
+    <h1>{{ props.title }} - {{ props.intro }}</h1>
+{% endmacro %}

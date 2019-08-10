@@ -1,0 +1,6 @@
+{% macro person(props) %}
+    {% if props.image %}
+        <img style="border-radius: 99999px" src="img/{{props.image}}" alt="" />
+    {% endif %}
+    <p><strong>{{ props.name }} //</strong> {{props.role}}</p>
+{% endmacro %}
