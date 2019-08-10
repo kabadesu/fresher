@@ -2,6 +2,11 @@
 {% extends "@layouts/layout.twig" %}
 
 {% block content %}
-    <h1>{{projectName}}</h1>
-    {{ icon({name: 'triangle', extraClasses: ''}) }}
+<h1>{{projectName}}</h1>
+{{ icon({name: 'triangle', extraClasses: ''}) }}
+
+{% markdown %}
+## Now with markdown support!
+{% endmarkdown %}
+
 {% endblock %}

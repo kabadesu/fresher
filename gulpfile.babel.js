@@ -1,10 +1,13 @@
-const gulp = require('gulp');
-const gulpLoadPlugins = require('gulp-load-plugins');
-const autoprefixer = require('autoprefixer');
-const browserSync = require('browser-sync').create();
-const webpack = require('webpack');
-const webpackConfig = require('./webpack.config.js');
-const fs = require('fs');
+'use strict';
+
+import gulp from 'gulp';
+import gulpLoadPlugins from 'gulp-load-plugins';
+import autoprefixer from 'autoprefixer';
+import browserSync from 'browser-sync';
+import webpack from 'webpack';
+import webpackConfig from './webpack.config.js';
+
+browserSync.create();
 
 const $ = gulpLoadPlugins({
     pattern: [
@@ -21,11 +24,10 @@ const _ = {
     dist: './dist',
 };
 
-// Twig setup
-
-let siteData = require(`${_.src}/data.json`);
-
-const { TwingEnvironment, TwingLoaderFilesystem } = require('twing');
+// Twing setup
+import { TwingEnvironment, TwingLoaderFilesystem } from 'twing';
+import { TwingExtensionMarkdown } from "twing-markdown";
+import data from './src/twig/data.js';
 
 const twingInit = () => {
     const loader = new TwingLoaderFilesystem('.');
@@ -37,6 +39,7 @@ const twingInit = () => {
 
     const env = new TwingEnvironment(loader);
     env.addGlobal('imagepath', '/img');
+    env.addExtension(new TwingExtensionMarkdown());
 
     return {
         loader, env
@@ -99,7 +102,7 @@ function twig() {
     let { loader, env } = twingInit();
 
     return gulp.src(`${_.src}/twig/pages/**/*.twig`)
-        .pipe($.twing(env, siteData))
+        .pipe($.twing(env, data))
         .pipe(gulp.dest(_.dist))
 }
 
