@@ -31,6 +31,7 @@ const twingInit = () => {
     const loader = new TwingLoaderFilesystem('.');
 
     loader.addPath(`${_.src}/twig/components/`, 'components');
+    loader.addPath(`${_.src}/twig/includes/`, 'includes');
     loader.addPath(`${_.src}/twig/layouts/`, 'layouts');
     loader.addPath(`${_.src}/img/`, 'image');
 
@@ -159,7 +160,6 @@ gulp.task('watch', () => {
     gulp.watch(`${_.src}/scss/**/*.scss`, gulp.series(stylelint, styles));
     gulp.watch(`${_.src}/js/**/*.js`, gulp.series(lintJs, buildJs)).on('change', browserSync.reload);
     gulp.watch(`${_.src}/icons/**/*.svg`, gulp.series(icons));
-    gulp.watch(`${_.src}/data.json`, gulp.series(twig)).on('change', browserSync.reload);
     gulp.watch(`${_.src}/twig/**/*.twig`, gulp.series(twig)).on('change', browserSync.reload);
 });
 
