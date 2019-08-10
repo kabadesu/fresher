@@ -1,21 +1,10 @@
 {
     "extends": "stylelint-config-recommended-scss",
     "plugins": [
-        "stylelint-at-rule-no-children",
         "stylelint-declaration-block-no-ignored-properties",
-        "stylelint-high-performance-animation",
-        "stylelint-order",
-        "stylelint-selector-bem-pattern"
+        "stylelint-order"
 	],
     "rules": {
-        "aditayvm/at-rule-no-children": [{
-            "ignore": [
-                "for",
-                "if",
-                "else",
-                "each"
-            ]
-        }],
         "at-rule-empty-line-before": [
             "always",
             {
@@ -106,21 +95,6 @@
             "rules"
         ],
         "plugin/declaration-block-no-ignored-properties": true,
-        "plugin/no-low-performance-animation-properties": [
-            true,
-            {
-                "ignore": "paint-properties"
-            }
-        ],
-        "plugin/selector-bem-pattern": {
-            "preset": "bem",
-            "implicitComponents": "src/scss/components/**/*.scss",
-            "componentSelectors": "^\\.{componentName}(?:__[a-z0-9]+(?:-[a-z0-9]+)*)*(?:--[a-z0-9]+(?:-[a-z0-9]+)*)*(?:\\[.+\\])*$",
-            "utilitySelectors": "^\\.u-[a-z0-9]+$",
-            "ignoreSelectors": [
-                "\\#\\{\\$[a-z0-9]+(?:-[a-z0-9]+)*\\}"
-            ]
-        },
         "property-no-vendor-prefix": true,
         "rule-empty-line-before": [
             "always-multi-line",

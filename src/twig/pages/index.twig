@@ -1,9 +1,7 @@
-{% from "icon.njk" import icon %}
-{% extends "layout.njk" %}
+{% from "@components/icon.twig" import icon %}
+{% extends "@layouts/layout.twig" %}
 
 {% block content %}
     <h1>{{projectName}}</h1>
-
     {{ icon({name: 'triangle', extraClasses: ''}) }}
-
 {% endblock %}
