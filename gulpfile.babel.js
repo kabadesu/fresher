@@ -39,7 +39,7 @@ const twingInit = () => {
 
     const env = new TwingEnvironment(loader);
     env.addGlobal('imagepath', '/img');
-    env.addExtension(new TwingExtensionMarkdown({pedantic: true}));
+    env.addExtension(new TwingExtensionMarkdown());
 
     return {
         loader, env
