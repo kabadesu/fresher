@@ -1,11 +1,13 @@
-'use strict';
-
 import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import autoprefixer from 'autoprefixer';
 import browserSync from 'browser-sync';
+import { TwingEnvironment, TwingLoaderFilesystem } from 'twing';
+import { TwingExtensionMarkdown } from 'twing-markdown';
 import webpack from 'webpack';
-import webpackConfig from './webpack.config.js';
+import webpackConfig from './webpack.config';
+
+const twigData = require('./src/twig/data.json');
 
 browserSync.create();
 
@@ -14,7 +16,7 @@ const $ = gulpLoadPlugins({
         '*',
         '!stylelint',
         '!twing',
-        '!eslint'
+        '!eslint',
     ],
     lazy: true,
 });
@@ -25,10 +27,6 @@ const _ = {
 };
 
 // Twing setup
-import { TwingEnvironment, TwingLoaderFilesystem } from 'twing';
-import { TwingExtensionMarkdown } from "twing-markdown";
-import data from './src/twig/data.js';
-
 const twingInit = () => {
     const loader = new TwingLoaderFilesystem('.');
 
@@ -42,9 +40,9 @@ const twingInit = () => {
     env.addExtension(new TwingExtensionMarkdown());
 
     return {
-        loader, env
+        loader, env,
     };
-}
+};
 
 // gulp-eslint can read from .eslintignore but it makes the task run slower.
 const eslintFileList = [
@@ -65,96 +63,96 @@ function webserver() {
         },
         port: 8000,
         // ghostMode: false,
-    })
+    });
 }
 
 function clean() {
     return gulp.src(`${_.dist}*`, { read: false })
-    .pipe($.clean())
+        .pipe($.clean());
 }
 
 function icons() {
     return gulp.src(`${_.src}/icons/**/*.svg`)
-    .pipe($.cheerio({
-        // I'd usually use $ here, but es6lint is complaining about it so...
-        run: (ಠ_ಠ) => {
-            const fills = ['#000', '#000000', 'none'];
-            ಠ_ಠ('[fill]').each(() => {
-                const fill = ಠ_ಠ(this).attr('fill');
-                if (fills.indexOf(fill) !== -1) {
-                    ಠ_ಠ(this).removeAttr('fill');
-                }
-            });
-        },
-        parserOptions: { xmlMode: true },
-    }))
-    .pipe($.svgmin({
-        plugins: [{
-            removeTitle: true,
-        }],
-    }))
-    .pipe($.svgstore())
-    .pipe($.rename('icons.svg'))
-    .pipe(gulp.dest(`${_.dist}/img`))
+        .pipe($.cheerio({
+            // I'd usually use $ here, but es6lint is complaining about it so...
+            run: (ಠ_ಠ) => {
+                const fills = ['#000', '#000000', 'none'];
+                ಠ_ಠ('[fill]').each(() => {
+                    const fill = ಠ_ಠ(this).attr('fill');
+                    if (fills.indexOf(fill) !== -1) {
+                        ಠ_ಠ(this).removeAttr('fill');
+                    }
+                });
+            },
+            parserOptions: { xmlMode: true },
+        }))
+        .pipe($.svgmin({
+            plugins: [{
+                removeTitle: true,
+            }],
+        }))
+        .pipe($.svgstore())
+        .pipe($.rename('icons.svg'))
+        .pipe(gulp.dest(`${_.dist}/img`));
 }
 
 function twig() {
-    let { loader, env } = twingInit();
+    const { env } = twingInit();
 
     return gulp.src(`${_.src}/twig/pages/**/*.twig`)
-        .pipe($.twing(env, data))
-        .pipe(gulp.dest(_.dist))
+        .pipe($.twing(env, twigData))
+        .pipe(gulp.dest(_.dist));
 }
 
 function styles() {
     return gulp.src(`${_.src}/scss/main.scss`)
-    .pipe($.sass({
-        precision: 8,
-        includePaths: ['node_modules/normalize-scss/sass'],
-    }).on('error', $.sass.logError))
-    .pipe($.postcss(postcssPlugins))
-    .pipe(gulp.dest(`${_.dist}/css`))
-    .pipe(browserSync.reload({ stream: true }))
+        .pipe($.sass({
+            precision: 8,
+            includePaths: ['node_modules/normalize-scss/sass'],
+        }).on('error', $.sass.logError))
+        .pipe($.postcss(postcssPlugins))
+        .pipe(gulp.dest(`${_.dist}/css`))
+        .pipe(browserSync.reload({ stream: true }));
 }
 
 function stylelint() {
     return gulp.src(`${_.src}/scss/**/*.scss`)
-    .pipe($.stylelint({
-        reporters: [{
-            formatter: 'string',
-            console: true,
-        }],
-    }))
+        .pipe($.stylelint({
+            reporters: [{
+                formatter: 'string',
+                console: true,
+            }],
+        }));
 }
 
 function lintJs() {
     return gulp.src(eslintFileList)
-    .pipe($.eslint({ useEslintrc: true }))
-    .pipe($.eslint.format())
+        .pipe($.eslint({ useEslintrc: true }))
+        .pipe($.eslint.format());
 }
 
 function copyImages() {
     return gulp.src(`${_.src}/img/**/*`)
-    .pipe(gulp.dest(`${_.dist}/img`))
+        .pipe(gulp.dest(`${_.dist}/img`));
 }
 
 function copyFonts() {
     return gulp.src(`${_.src}/fonts/**/*`)
-    .pipe(gulp.dest(`${_.dist}/fonts`))
+        .pipe(gulp.dest(`${_.dist}/fonts`));
 }
 
 function buildJs() {
     return new Promise((resolve, reject) => {
         webpack(webpackConfig, (err, stats) => {
             if (err) {
-                return reject(err)
+                return reject(err);
             }
             if (stats.hasErrors()) {
                 return reject(new Error(stats.compilation.errors.join('\n')))
             }
-            resolve()
-        })
-    })
+            return resolve();
+        });
+    });
 }
 
 gulp.task('copy', gulp.series(copyImages, copyFonts, lintJs, buildJs));
