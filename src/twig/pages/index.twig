@@ -2,15 +2,18 @@
 {% from "@components/icon.twig" import icon %}
 
 {% block content %}
-    <h1>{{projectName}}</h1>
-    {{ icon({name: 'triangle', extraClasses: ''}) }}
 
-    {% for section in data.sections %}
+<h1>{{projectName}}</h1>
+{{ icon({name: 'triangle', extraClasses: ''}) }}
 
-        {% include '@includes/' ~ section.component ~ '.twig' with {
-            props: section
-        } %}
+{% markdown %}
+{{markdown|replace({'  ':''})}}
+{% endmarkdown %}
 
-    {% endfor %}
+{% for section in data.sections %}
+    {% include '@includes/' ~ section.component ~ '.twig' with {
+        props: section
+    } %}
+{% endfor %}
 
 {% endblock %}
