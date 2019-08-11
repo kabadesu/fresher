@@ -1,6 +1,24 @@
 {
-    "extends": "airbnb/base",
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true,
+            "experimentalObjectRestSpread": true
+        }
+    },
     "rules": {
-        "indent": ["error", 4],
+        "indent": [
+            "error",
+            4,
+            {
+                "SwitchCase": 1,
+                "VariableDeclarator": 1
+            }
+        ],
+        "strict": "error",
+        "semi": "error",
+        "max-len": ["error", 120, 4],
+        "complexity": ["error", {"max": 20}]
     }
 }
