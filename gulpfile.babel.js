@@ -1,6 +1,7 @@
 import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import autoprefixer from 'autoprefixer';
+import pxtorem from 'postcss-pxtorem';
 import browserSync from 'browser-sync';
 import { TwingEnvironment, TwingLoaderFilesystem } from 'twing';
 import { TwingExtensionMarkdown } from 'twing-markdown';
@@ -53,7 +54,18 @@ const eslintFileList = [
 ];
 
 const postcssPlugins = [
-    autoprefixer(),
+    autoprefixer({grid: true}),
+];
+
+const postcssBuildPlugins = [
+    autoprefixer({grid: true}),
+    pxtorem({
+        rootValue: 16,
+        unitPrecision: 8,
+        propList: ['*'],
+        selectorBlackList: [],
+        minPixelValue: 2
+    })
 ];
 
 function webserver() {
@@ -74,8 +86,12 @@ function clean() {
 function icons() {
     return gulp.src(`${_.src}/icons/**/*.svg`)
         .pipe($.cheerio({
-            // I'd usually use $ here, but es6lint is complaining about it so...
+            // I'd usually use $ here, but es6lint is complaining about it so
+            // I'll use this grumpy face instead.
             run: (ಠ_ಠ) => {
+                // This little just prepares our svgs to be colored using
+                // fill: currentColor; in CSS by striping our the following
+                // colors from any fill attribute in the svg.
                 const fills = ['#000', '#000000', 'none'];
                 ಠ_ಠ('[fill]').each(() => {
                     const fill = ಠ_ಠ(this).attr('fill');
@@ -111,6 +127,18 @@ function styles() {
             includePaths: ['node_modules/normalize-scss/sass'],
         }).on('error', $.sass.logError))
         .pipe($.postcss(postcssPlugins))
+        .pipe(gulp.dest(`${_.dist}/css`))
+        .pipe(browserSync.reload({ stream: true }));
+}
+
+function stylesBuild() {
+    return gulp.src(`${_.src}/scss/main.scss`)
+        .pipe($.sass({
+            precision: 8,
+            includePaths: ['node_modules/normalize-scss/sass'],
+        }).on('error', $.sass.logError))
+        .pipe($.postcss(postcssBuildPlugins))
+        .pipe($.csso())
         .pipe(gulp.dest(`${_.dist}/css`))
         .pipe(browserSync.reload({ stream: true }));
 }
@@ -166,6 +194,6 @@ gulp.task('watch', () => {
 
 gulp.task('clean', clean);
 
-gulp.task('build', gulp.series('copy', twig, icons, stylelint, styles));
+gulp.task('build', gulp.series('copy', twig, icons, stylelint, stylesBuild));
 gulp.task('test', gulp.series(stylelint, lintJs));
 gulp.task('default', gulp.series('copy', twig, icons, stylelint, styles, gulp.parallel('watch', webserver)));
